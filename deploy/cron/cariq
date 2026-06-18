@@ -1,0 +1,12 @@
+# Car IQ cron jobs
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# Laravel scheduler (every minute)
+* * * * * cariq cd /var/www/cariq/backend && php artisan schedule:run >> /var/log/cariq/scheduler.log 2>&1
+
+# Database + storage backup (daily at 02:30)
+30 2 * * * root /usr/local/bin/cariq-backup >> /var/log/cariq/backup.log 2>&1
+
+# Service health monitor (every 5 minutes)
+*/5 * * * * root /usr/local/bin/cariq-monitor >> /var/log/cariq/monitor.log 2>&1

@@ -1,0 +1,6 @@
+android.view.View|سياراتي IQ||[42,731][1038,871]
+android.view.View|تسجيل الدخول||[42,892][1038,949]
+android.widget.Button|دخول||[42,991][530,1117]
+android.widget.Button|تسجيل||[551,991][1038,1117]
+android.widget.EditText||Admin@12345|[42,1154][1038,1301]
+android.widget.Button|دخول||[42,1543][1038,1669]

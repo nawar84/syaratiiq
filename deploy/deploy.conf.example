@@ -1,0 +1,29 @@
+# Copy to deploy.conf and edit before running scripts on the VPS.
+# cp deploy/deploy.conf.example deploy/deploy.conf
+
+# --- Required ---
+APP_DOMAIN="api.example.com"
+APP_DIR="/var/www/cariq"
+DEPLOY_USER="cariq"
+ADMIN_EMAIL="admin@example.com"
+
+# --- Database ---
+DB_NAME="car_iq"
+DB_USER="car_iq"
+DB_PASSWORD="CHANGE_ME_STRONG_PASSWORD"
+
+# --- Git (optional — leave empty to deploy uploaded files only) ---
+GIT_REPO=""
+GIT_BRANCH="master"
+
+# --- Backups ---
+BACKUP_DIR="/var/backups/cariq"
+BACKUP_RETENTION_DAYS=14
+
+# --- PHP ---
+PHP_VERSION="8.3"
+
+# --- Production flags ---
+RUN_DB_SEED="false"   # set true only for first deploy with demo data
+APP_ENV="production"
+APP_DEBUG="false"
