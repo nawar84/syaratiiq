@@ -33,6 +33,7 @@ yarn-error.*
 # local env files
 .env*.local
 deploy/deploy.conf
+deploy/VPS_CREDENTIALS.local.txt
 
 # typescript
 *.tsbuildinfo
