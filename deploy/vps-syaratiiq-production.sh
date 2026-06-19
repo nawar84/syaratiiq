@@ -118,6 +118,7 @@ run php artisan optimize
 log "=== 11. Permissions ==="
 chown -R www-data:www-data "${APP_DIR}"
 chmod -R 775 "${BACKEND}/storage" "${BACKEND}/bootstrap/cache"
+ln -sfn "${BACKEND}/public" "${APP_DIR}/public"
 
 log "=== 13-17. Nginx virtual host ==="
 cat > /etc/nginx/sites-available/syaratiiq <<NGINX
@@ -126,7 +127,7 @@ server {
     listen [::]:80;
     server_name ${DOMAIN} ${WWW_DOMAIN};
 
-    root ${BACKEND}/public;
+    root ${APP_DIR}/public;
     index index.php;
     charset utf-8;
     client_max_body_size 120M;
