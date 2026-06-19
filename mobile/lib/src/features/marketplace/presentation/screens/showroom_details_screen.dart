@@ -5,6 +5,8 @@ import 'package:mobile/src/core/auth/app_roles.dart';
 import 'package:mobile/src/core/theme/app_theme.dart';
 import 'package:mobile/src/core/theme/metallic_silver_text.dart';
 import 'package:mobile/src/core/utils/contact_launcher.dart';
+import 'package:mobile/src/core/utils/media_url.dart';
+import 'package:mobile/src/core/widgets/app_network_image.dart';
 import 'package:mobile/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:mobile/src/features/cars/presentation/providers/car_management_providers.dart';
 import 'package:mobile/src/features/marketplace/presentation/providers/marketplace_providers.dart';
@@ -47,7 +49,7 @@ class ShowroomDetailsScreen extends ConsumerWidget {
                   child: SizedBox(
                     height: 180,
                     width: double.infinity,
-                    child: Image.network(item.coverImageUrl!, fit: BoxFit.cover),
+                    child: AppNetworkImage(url: item.coverImageUrl!, fit: BoxFit.cover),
                   ),
                 ),
               SliverPadding(
@@ -57,7 +59,10 @@ class ShowroomDetailsScreen extends ConsumerWidget {
                     Row(
                       children: [
                         if (item.logoUrl != null)
-                          CircleAvatar(radius: 32, backgroundImage: NetworkImage(item.logoUrl!))
+                          CircleAvatar(
+                            radius: 32,
+                            backgroundImage: NetworkImage(resolveMediaUrl(item.logoUrl!)),
+                          )
                         else
                           const CircleAvatar(radius: 32, child: Icon(Icons.storefront, size: 32)),
                         const SizedBox(width: 12),

@@ -1,256 +1,267 @@
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useState } from 'react';
-import { Image, Pressable, SafeAreaView, StyleSheet, View } from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  View,
+  useWindowDimensions,
+} from 'react-native';
+import { BrandLogoBadge } from './components/BrandLogoBadge';
+import { BottomNavBar } from './components/BottomNavBar';
+import { useResponsiveLayout } from './hooks/useResponsiveLayout';
 import { MetallicSilverText } from './MetallicSilverText';
+import { colors } from './theme/colors';
 
-const topBrands = ['TOYOTA', 'HYUNDAI', 'LAND', 'NISSAN'];
-const bottomBrands = ['CAR', 'MG', 'BMW', 'BENZ'];
+const heroImage = require('./mobile/assets/images/hero_toyota_land_cruiser.png');
+
+const brands = [
+  { name: 'Toyota', logo: require('./mobile/assets/brands/png/toyota.png') },
+  { name: 'Hyundai', logo: require('./mobile/assets/brands/png/hyundai.png') },
+  { name: 'Land Rover', logo: require('./mobile/assets/brands/png/land_rover.png') },
+  { name: 'BMW', logo: require('./mobile/assets/brands/png/bmw.png') },
+  { name: 'Mercedes', logo: require('./mobile/assets/brands/png/mercedes.png') },
+  { name: 'Kia', logo: require('./mobile/assets/brands/png/kia.png') },
+  { name: 'Cadillac', logo: require('./mobile/assets/brands/png/cadillac.png') },
+  { name: 'Changan', logo: require('./mobile/assets/brands/png/changan.png') },
+] as const;
+
+const stats = [
+  { value: '+10,000', label: 'سيارة' },
+  { value: '+1,000', label: 'معرض' },
+  { value: '18', label: 'محافظة' },
+] as const;
+
+type Tab = 'home' | 'search' | 'account';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'home' | 'search' | 'account'>('home');
+  const [activeTab, setActiveTab] = useState<Tab>('home');
+  const layout = useResponsiveLayout();
+  const { width } = useWindowDimensions();
+  const { scale, contentMaxWidth, horizontalPadding, heroHeight, isDesktop } = layout;
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.phoneShell}>
-        <View style={styles.topGlow} />
+    <View style={styles.root}>
+      <LinearGradient
+        colors={[colors.backgroundTop, colors.backgroundBottom]}
+        style={StyleSheet.absoluteFill}
+      />
 
-        <View style={styles.header}>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={[
+          styles.scrollContent,
+          {
+            maxWidth: contentMaxWidth,
+            paddingHorizontal: horizontalPadding,
+            paddingBottom: 96,
+            width: '100%',
+            alignSelf: 'center',
+          },
+        ]}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={[styles.header, { marginTop: 12 * scale }]}>
+          <MetallicSilverText style={[styles.logo, { fontSize: 28 * scale }]}>
+            سياراتي IQ
+          </MetallicSilverText>
           <View style={styles.headerIcons}>
-            <Ionicons name="person-circle-outline" size={31} color="#e6ecff" />
-            <Ionicons name="notifications-outline" size={25} color="#e6ecff" />
+            <Ionicons name="notifications-outline" size={28 * scale} color={colors.iconMuted} />
+            <Ionicons name="person-circle-outline" size={30 * scale} color={colors.iconMuted} />
           </View>
-          <MetallicSilverText style={styles.logo}>سيارتي IQ</MetallicSilverText>
         </View>
 
         <Image
-          source={{
-            uri: 'https://images.unsplash.com/photo-1705680393131-f6f1695d2f68?auto=format&fit=crop&w=1200&q=80',
-          }}
-          style={styles.carImage}
-          resizeMode="cover"
+          source={heroImage}
+          style={[
+            styles.hero,
+            {
+              height: heroHeight,
+              marginTop: 12 * scale,
+              maxWidth: isDesktop ? 920 : width - horizontalPadding * 2,
+            },
+          ]}
+          resizeMode="contain"
         />
 
-        <View style={styles.statsRow}>
-          <View style={styles.glassCard}>
-            <MetallicSilverText style={styles.glassValue}>18</MetallicSilverText>
-            <MetallicSilverText style={styles.glassLabel}>محافظة</MetallicSilverText>
-          </View>
-          <View style={styles.glassCard}>
-            <MetallicSilverText style={styles.glassValue}>+1,000</MetallicSilverText>
-            <MetallicSilverText style={styles.glassLabel}>معرض</MetallicSilverText>
-          </View>
-          <View style={styles.glassCard}>
-            <MetallicSilverText style={styles.glassValue}>+10,000</MetallicSilverText>
-            <MetallicSilverText style={styles.glassLabel}>سيارة</MetallicSilverText>
-          </View>
-        </View>
-
-        <View style={styles.headlineWrap}>
-          <MetallicSilverText headline style={styles.headline}>
-            أكبر منصة معارض سيارات في العراق
-          </MetallicSilverText>
-        </View>
-        <MetallicSilverText style={styles.subHeadline}>اعرض سياراتك ووصل إلى الآف المشترين</MetallicSilverText>
-
-        <View style={styles.brandRow}>
-          {topBrands.map((brand) => (
-            <View key={brand} style={styles.brandCircle}>
-              <MetallicSilverText style={styles.brandText}>{brand}</MetallicSilverText>
-            </View>
-          ))}
-        </View>
-        <View style={styles.brandRow}>
-          {bottomBrands.map((brand) => (
-            <View key={brand} style={styles.brandCircle}>
-              <MetallicSilverText style={styles.brandText}>{brand}</MetallicSilverText>
+        <View style={[styles.statsRow, { marginTop: 12 * scale, gap: 8 * scale }]}>
+          {stats.map((stat) => (
+            <View
+              key={stat.label}
+              style={[
+                styles.statCard,
+                {
+                  borderRadius: 16 * scale,
+                  paddingVertical: 12 * scale,
+                },
+              ]}
+            >
+              <MetallicSilverText style={[styles.statValue, { fontSize: 20 * scale }]}>
+                {stat.value}
+              </MetallicSilverText>
+              <MetallicSilverText style={[styles.statLabel, { fontSize: 14 * scale }]}>
+                {stat.label}
+              </MetallicSilverText>
             </View>
           ))}
         </View>
 
-        <View style={styles.bottomBar}>
-          <Pressable style={styles.navItem} onPress={() => setActiveTab('account')}>
-            <Ionicons
-              name={activeTab === 'account' ? 'person' : 'person-outline'}
-              size={28}
-              color={activeTab === 'account' ? '#fff' : '#8591bc'}
-            />
-            <MetallicSilverText style={[styles.navText, activeTab === 'account' && styles.navTextActive]}>
-              حسابي
-            </MetallicSilverText>
-          </Pressable>
+        <MetallicSilverText
+          headline
+          style={[
+            styles.headline,
+            {
+              fontSize: (isDesktop ? 44 : 40) * scale,
+              lineHeight: (isDesktop ? 48 : 44) * scale,
+              marginTop: 18 * scale,
+            },
+          ]}
+        >
+          {'أكبر منصة معارض سيارات\nفي العراق'}
+        </MetallicSilverText>
 
-          <Pressable style={styles.addButton}>
-            <Ionicons name="add" size={60} color="#fff" />
-          </Pressable>
+        <MetallicSilverText
+          style={[
+            styles.subHeadline,
+            {
+              fontSize: 17 * scale,
+              marginTop: 8 * scale,
+            },
+          ]}
+        >
+          اعرض سياراتك ووصل الى آلاف المشترين
+        </MetallicSilverText>
 
-          <Pressable style={styles.navItem} onPress={() => setActiveTab('home')}>
-            <Ionicons
-              name={activeTab === 'home' ? 'home' : 'home-outline'}
-              size={28}
-              color={activeTab === 'home' ? '#fff' : '#8591bc'}
-            />
-            <MetallicSilverText style={[styles.navText, activeTab === 'home' && styles.navTextActive]}>
-              الرئيسية
-            </MetallicSilverText>
-          </Pressable>
-        </View>
+        <MetallicSilverText
+          style={[
+            styles.brandsTitle,
+            {
+              fontSize: 22 * scale,
+              marginTop: 14 * scale,
+            },
+          ]}
+        >
+          أشهر الماركات
+        </MetallicSilverText>
+        <MetallicSilverText
+          style={[
+            styles.brandsSubtitle,
+            {
+              fontSize: 14 * scale,
+              marginTop: 4 * scale,
+            },
+          ]}
+        >
+          تصفح حسب العلامة التجارية
+        </MetallicSilverText>
+
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={[
+            styles.brandsRow,
+            {
+              paddingVertical: 14 * scale,
+              gap: 12 * scale,
+              paddingHorizontal: 4 * scale,
+            },
+          ]}
+          style={{ marginHorizontal: -4 * scale }}
+        >
+          {brands.map((brand) => (
+            <BrandLogoBadge key={brand.name} name={brand.name} logo={brand.logo} scale={scale} />
+          ))}
+        </ScrollView>
+      </ScrollView>
+
+      <View style={styles.navDock}>
+        <BottomNavBar
+          activeTab={activeTab}
+          onHome={() => setActiveTab('home')}
+          onAccount={() => setActiveTab('account')}
+          scale={scale}
+          maxWidth={contentMaxWidth}
+        />
       </View>
+
       <StatusBar style="light" />
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
-    backgroundColor: '#02091f',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: colors.scaffold,
   },
-  phoneShell: {
-    width: '93%',
-    maxWidth: 420,
-    height: '95%',
-    backgroundColor: '#040f2e',
-    borderRadius: 34,
-    borderWidth: 1,
-    borderColor: '#1f2f59',
-    overflow: 'hidden',
-    paddingTop: 18,
-    paddingHorizontal: 14,
+  scroll: {
+    flex: 1,
   },
-  topGlow: {
-    position: 'absolute',
-    top: -120,
-    left: -80,
-    right: -80,
-    height: 260,
-    backgroundColor: '#1542af',
-    opacity: 0.35,
-    borderRadius: 180,
+  scrollContent: {
+    flexGrow: 1,
   },
   header: {
-    flexDirection: 'row-reverse',
-    justifyContent: 'space-between',
+    flexDirection: 'row',
     alignItems: 'center',
-    zIndex: 2,
-  },
-  logo: {
-    fontSize: 44,
-    fontWeight: '800',
+    justifyContent: 'space-between',
   },
   headerIcons: {
     flexDirection: 'row',
-    gap: 8,
     alignItems: 'center',
+    gap: 8,
   },
-  carImage: {
+  logo: {
+    fontWeight: '800',
+  },
+  hero: {
     width: '100%',
-    height: 245,
-    borderRadius: 18,
-    marginTop: 10,
+    alignSelf: 'center',
   },
   statsRow: {
-    flexDirection: 'row-reverse',
-    justifyContent: 'space-between',
-    marginTop: -2,
+    flexDirection: 'row',
   },
-  glassCard: {
-    width: '31.8%',
-    borderRadius: 18,
-    paddingVertical: 13,
-    backgroundColor: 'rgba(198,212,255,0.14)',
+  statCard: {
+    flex: 1,
+    backgroundColor: colors.statFill,
     borderWidth: 1,
-    borderColor: 'rgba(173,194,255,0.28)',
+    borderColor: colors.statBorder,
+    alignItems: 'center',
   },
-  glassValue: {
-    fontSize: 32,
+  statValue: {
     fontWeight: '800',
     textAlign: 'center',
   },
-  glassLabel: {
-    fontSize: 20,
+  statLabel: {
+    fontWeight: '500',
     textAlign: 'center',
     marginTop: 2,
   },
-  headlineWrap: {
-    width: '100%',
-    marginTop: 16,
-  },
   headline: {
-    fontSize: 50,
-    lineHeight: 58,
     fontWeight: '900',
     textAlign: 'center',
   },
   subHeadline: {
-    fontSize: 26,
+    fontWeight: '500',
     textAlign: 'center',
-    marginTop: 6,
-    marginBottom: 12,
   },
-  brandRow: {
-    flexDirection: 'row-reverse',
-    justifyContent: 'space-evenly',
-    marginTop: 8,
-  },
-  brandCircle: {
-    width: 73,
-    height: 73,
-    borderRadius: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#0f1f4a',
-    borderWidth: 1,
-    borderColor: '#304f8f',
-    shadowColor: '#6d86ff',
-    shadowOpacity: 0.22,
-    shadowRadius: 8,
-  },
-  brandText: {
-    fontSize: 11,
-    fontWeight: '700',
-  },
-  bottomBar: {
-    position: 'absolute',
-    bottom: 10,
-    left: 10,
-    right: 10,
-    height: 114,
-    borderRadius: 27,
-    backgroundColor: '#121f44',
-    borderWidth: 1,
-    borderColor: '#2f3f72',
-    flexDirection: 'row-reverse',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    paddingTop: 17,
-    paddingHorizontal: 30,
-  },
-  navItem: {
-    alignItems: 'center',
-    gap: 2,
-  },
-  navText: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  navTextActive: {
+  brandsTitle: {
     fontWeight: '800',
+    textAlign: 'center',
   },
-  addButton: {
-    width: 141,
-    height: 141,
-    marginTop: -54,
-    borderRadius: 72,
-    backgroundColor: '#ff9412',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 9,
-    borderColor: '#141f46',
-    shadowColor: '#ff8d0f',
-    shadowOpacity: 0.35,
-    shadowRadius: 16,
+  brandsSubtitle: {
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  brandsRow: {
+    flexDirection: 'row-reverse',
+    alignItems: 'flex-start',
+  },
+  navDock: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
 });

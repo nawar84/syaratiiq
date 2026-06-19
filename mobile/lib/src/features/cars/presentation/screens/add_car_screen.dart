@@ -1,9 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/src/core/network/api_error.dart';
+import 'package:mobile/src/core/widgets/app_network_image.dart';
+import 'package:mobile/src/core/utils/local_file_image.dart';
 import 'package:mobile/src/core/theme/app_theme.dart';
 import 'package:mobile/src/core/theme/metallic_silver_text.dart';
 import 'package:mobile/src/features/cars/domain/entities/car_management_entities.dart';
@@ -488,10 +488,7 @@ class _AddCarScreenState extends ConsumerState<AddCarScreen> {
       height: 120,
       color: const Color(0xFF152A55),
       alignment: Alignment.center,
-      child: Image.file(
-        File(path),
-        fit: BoxFit.contain,
-      ),
+      child: buildLocalFileImage(path, fit: BoxFit.contain),
     );
   }
 
@@ -501,10 +498,9 @@ class _AddCarScreenState extends ConsumerState<AddCarScreen> {
       height: 120,
       color: const Color(0xFF152A55),
       alignment: Alignment.center,
-      child: Image.network(
-        url,
+      child: AppNetworkImage(
+        url: url,
         fit: BoxFit.contain,
-        errorBuilder: (_, _, _) => const Icon(Icons.broken_image_outlined),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/src/core/widgets/app_network_image.dart';
 
 class CarImageGallery extends StatefulWidget {
   const CarImageGallery({
@@ -288,8 +289,8 @@ class _NetworkImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.network(
-      url,
+    return AppNetworkImage(
+      url: url,
       fit: fit,
       width: fit == BoxFit.contain ? double.infinity : null,
       height: fit == BoxFit.contain ? double.infinity : null,

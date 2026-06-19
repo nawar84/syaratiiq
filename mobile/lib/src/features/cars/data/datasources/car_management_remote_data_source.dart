@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/src/core/network/api_client.dart';
+import 'package:mobile/src/core/network/multipart_utils.dart';
 import 'package:mobile/src/features/cars/domain/entities/car_management_entities.dart';
 
 class CarManagementRemoteDataSource {
@@ -128,8 +129,8 @@ class CarManagementRemoteDataSource {
       form.files.add(
         MapEntry(
           'images[]',
-          await MultipartFile.fromFile(
-            image.path,
+          await multipartFileFromXFile(
+            image,
             filename: _imageFilename(image),
           ),
         ),

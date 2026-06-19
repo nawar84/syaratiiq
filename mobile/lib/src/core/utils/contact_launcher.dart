@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -34,7 +33,7 @@ class ContactLauncher {
       Uri.parse('https://wa.me/$digits'),
       Uri.parse('https://api.whatsapp.com/send?phone=$digits'),
     ];
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (!kIsWeb) {
       uris.insert(0, Uri.parse('whatsapp://send?phone=$digits'));
     }
     return uris;

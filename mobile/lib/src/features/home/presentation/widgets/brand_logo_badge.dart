@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/src/core/theme/metallic_silver_text.dart';
+import 'package:mobile/src/core/widgets/app_network_image.dart';
 import 'package:mobile/src/features/home/domain/entities/brand_entity.dart';
 
 class BrandLogoBadge extends StatelessWidget {
@@ -46,8 +47,8 @@ class BrandLogoBadge extends StatelessWidget {
                   errorBuilder: (_, _, _) => _fallbackLabel(logoSize),
                 )
               : brand.logo != null && brand.logo!.startsWith('http')
-                  ? Image.network(
-                      brand.logo!,
+                  ? AppNetworkImage(
+                      url: brand.logo!,
                       fit: BoxFit.contain,
                       filterQuality: FilterQuality.high,
                       errorBuilder: (_, _, _) => _fallbackLabel(logoSize),

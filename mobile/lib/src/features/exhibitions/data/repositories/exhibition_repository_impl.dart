@@ -33,4 +33,23 @@ class ExhibitionRepositoryImpl implements ExhibitionRepository {
 
   @override
   Future<List<ProvinceEntity>> fetchProvinces() => _remoteDataSource.fetchProvinces();
+
+  @override
+  Future<void> updateExhibition({
+    required int id,
+    required String name,
+    required String ownerName,
+    required String phone,
+    XFile? logoFile,
+    bool removeLogo = false,
+  }) {
+    return _remoteDataSource.updateExhibition(
+      id: id,
+      name: name,
+      ownerName: ownerName,
+      phone: phone,
+      logoFile: logoFile,
+      removeLogo: removeLogo,
+    );
+  }
 }

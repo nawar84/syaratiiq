@@ -13,4 +13,12 @@ abstract class ExhibitionRepository {
     String? logoUrl,
     String? description,
   });
+  Future<void> updateExhibition({
+    required int id,
+    required String name,
+    required String ownerName,
+    required String phone,
+    XFile? logoFile,
+    bool removeLogo = false,
+  });
 }

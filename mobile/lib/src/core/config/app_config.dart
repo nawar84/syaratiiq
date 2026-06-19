@@ -1,7 +1,5 @@
-import 'dart:io';
-
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:mobile/src/core/config/dev_host.dart';
 
 class AppConfig {
   AppConfig._();
@@ -42,25 +40,11 @@ class AppConfig {
     if (kReleaseMode) {
       throw StateError(
         'Production build requires API_BASE_URL or API_HOST. '
-        'Example: flutter build apk --dart-define=API_BASE_URL=https://api.example.com/api',
+        'Example: flutter build web --dart-define=API_BASE_URL=https://syaratiiq.com/api',
       );
     }
 
-    apiBaseUrl = _buildUrl(host: await _devHost(), port: _portFromEnv);
-  }
-
-  static Future<String> _devHost() async {
-    if (Platform.isAndroid) {
-      final androidInfo = await DeviceInfoPlugin().androidInfo;
-      return androidInfo.isPhysicalDevice ? devLanHost : '10.0.2.2';
-    }
-
-    if (Platform.isIOS) {
-      final iosInfo = await DeviceInfoPlugin().iosInfo;
-      return iosInfo.isPhysicalDevice ? devLanHost : '127.0.0.1';
-    }
-
-    return '127.0.0.1';
+    apiBaseUrl = _buildUrl(host: await resolveDevHost(), port: _portFromEnv);
   }
 
   static String _buildUrl({required String host, required String port}) {

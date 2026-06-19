@@ -34,6 +34,11 @@ yarn-error.*
 .env*.local
 deploy/deploy.conf
 deploy/VPS_CREDENTIALS.local.txt
+deploy/vps_deploy_key
+deploy/vps_deploy_key.pub
+deploy/askpass.cmd
+deploy/askpass_qnj.cmd
+deploy/askpass.py
 
 # typescript
 *.tsbuildinfo

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mobile/src/core/auth/app_roles.dart';
 import 'package:mobile/src/core/theme/metallic_silver_text.dart';
+import 'package:mobile/src/core/widgets/app_network_image.dart';
+import 'package:mobile/src/features/auth/presentation/providers/auth_providers.dart';
+import 'package:mobile/src/features/cars/presentation/providers/car_management_providers.dart';
+import 'package:mobile/src/features/exhibitions/presentation/screens/seller_profile_screen.dart';
 import 'package:mobile/src/features/home/presentation/providers/home_providers.dart';
 import 'package:mobile/src/features/home/presentation/widgets/brands_section.dart';
 import 'package:mobile/src/features/home/presentation/widgets/hero_car_image.dart';
@@ -12,6 +17,12 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final stats = ref.watch(statisticsProvider);
     final brands = ref.watch(brandsProvider);
+    final session = ref.watch(authSessionProvider).asData?.value;
+    final isSeller = session != null && AppRoles.isSeller(session.role);
+    final myExhibitions = isSeller ? ref.watch(myExhibitionsProvider) : null;
+    final showroomLogo = myExhibitions?.asData?.value.isNotEmpty == true
+        ? myExhibitions!.asData!.value.first.logoUrl
+        : null;
     final width = MediaQuery.of(context).size.width;
     final scale = (width / 430).clamp(0.9, 1.2);
 
@@ -40,10 +51,30 @@ class HomeScreen extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
-                  children: const [
-                    Icon(Icons.notifications_none_rounded, color: Color(0xFFC8D0D8), size: 28),
-                    SizedBox(width: 8),
-                    Icon(Icons.account_circle_outlined, color: Color(0xFFC8D0D8), size: 30),
+                  children: [
+                    const Icon(Icons.notifications_none_rounded, color: Color(0xFFC8D0D8), size: 28),
+                    const SizedBox(width: 8),
+                    GestureDetector(
+                      onTap: isSeller
+                          ? () => Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => const SellerProfileScreen()),
+                              )
+                          : null,
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: const Color(0xFFC8D0D8), width: 1.2),
+                          color: const Color(0xFF152A55),
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: isSeller && showroomLogo != null && showroomLogo.isNotEmpty
+                            ? AppNetworkImage(url: showroomLogo, fit: BoxFit.cover)
+                            : const Icon(Icons.account_circle_outlined, color: Color(0xFFC8D0D8), size: 28),
+                      ),
+                    ),
                   ],
                 ),
                 MetallicSilverText(

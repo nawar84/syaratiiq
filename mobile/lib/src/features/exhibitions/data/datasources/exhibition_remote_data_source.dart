@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/src/core/network/api_client.dart';
+import 'package:mobile/src/core/network/multipart_utils.dart';
 import 'package:mobile/src/features/exhibitions/domain/entities/province_entity.dart';
 
 class ExhibitionRemoteDataSource {
@@ -73,11 +74,43 @@ class ExhibitionRemoteDataSource {
       form.files.add(
         MapEntry(
           'logo',
-          await MultipartFile.fromFile(logoFile.path, filename: logoFile.name),
+          await multipartFileFromXFile(logoFile),
         ),
       );
     }
 
     await _client.dio.post('/exhibitions', data: form);
+  }
+
+  Future<void> updateExhibition({
+    required int id,
+    required String name,
+    required String ownerName,
+    required String phone,
+    XFile? logoFile,
+    bool removeLogo = false,
+  }) async {
+    final fields = <String, dynamic>{
+      'name': name,
+      'owner_name': ownerName,
+      'phone': phone,
+    };
+
+    if (removeLogo) {
+      fields['remove_logo'] = 1;
+    }
+
+    final form = FormData.fromMap(fields);
+
+    if (logoFile != null) {
+      form.files.add(
+        MapEntry(
+          'logo',
+          await multipartFileFromXFile(logoFile),
+        ),
+      );
+    }
+
+    await _client.dio.post('/exhibitions/$id?_method=PUT', data: form);
   }
 }

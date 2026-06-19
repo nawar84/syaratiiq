@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/src/core/theme/app_theme.dart';
+import 'package:mobile/src/core/widgets/app_network_image.dart';
 import 'package:mobile/src/features/marketplace/domain/entities/showroom_summary_entity.dart';
 
 class ShowroomCard extends StatelessWidget {
@@ -84,8 +85,8 @@ class _ShowroomImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (imageUrl != null && imageUrl!.isNotEmpty) {
-      return Image.network(
-        imageUrl!,
+      return AppNetworkImage(
+        url: imageUrl!,
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,

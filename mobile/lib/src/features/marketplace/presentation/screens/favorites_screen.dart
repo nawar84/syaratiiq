@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile/src/core/theme/app_theme.dart';
+import 'package:mobile/src/core/widgets/app_network_image.dart';
 import 'package:mobile/src/core/theme/metallic_silver_text.dart';
 import 'package:mobile/src/features/marketplace/presentation/providers/marketplace_providers.dart';
 import 'package:mobile/src/features/marketplace/presentation/screens/car_detail_screen.dart';
@@ -73,7 +74,12 @@ class FavoritesScreen extends ConsumerWidget {
                           leading: car.imageUrls.isNotEmpty
                               ? ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
-                                  child: Image.network(car.imageUrls.first, width: 56, height: 56, fit: BoxFit.cover),
+                                  child: AppNetworkImage(
+                                    url: car.imageUrls.first,
+                                    width: 56,
+                                    height: 56,
+                                    fit: BoxFit.cover,
+                                  ),
                                 )
                               : const Icon(Icons.directions_car, color: Color(0xFF8A97BF)),
                           title: Text(car.title, textAlign: TextAlign.right, style: AppTheme.orangeTextStyle),

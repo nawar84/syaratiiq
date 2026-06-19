@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mobile/src/core/layout/web_desktop_phone_frame.dart';
 import 'package:mobile/src/core/auth/app_permissions.dart';
 import 'package:mobile/src/core/auth/app_roles.dart';
 import 'package:mobile/src/core/theme/app_theme.dart';
@@ -37,6 +38,9 @@ class _CarsIraqAppState extends ConsumerState<CarsIraqApp> {
       title: 'سياراتي IQ',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
+      builder: (context, child) => WebDesktopPhoneFrame(
+        child: child ?? const SizedBox.shrink(),
+      ),
       home: sessionState.when(
         loading: () => const _StartupSplash(),
         error: (error, stackTrace) => const AuthScreen(),

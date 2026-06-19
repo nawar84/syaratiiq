@@ -1,14 +1,35 @@
 class OwnerExhibition {
-  const OwnerExhibition({required this.id, required this.name, required this.phone});
+  const OwnerExhibition({
+    required this.id,
+    required this.name,
+    required this.phone,
+    required this.ownerName,
+    this.logoUrl,
+    this.address = '',
+    this.provinceId,
+    this.provinceName,
+  });
+
   final int id;
   final String name;
   final String phone;
+  final String ownerName;
+  final String? logoUrl;
+  final String address;
+  final int? provinceId;
+  final String? provinceName;
 
   factory OwnerExhibition.fromJson(Map<String, dynamic> json) {
+    final province = json['province'] as Map<String, dynamic>?;
     return OwnerExhibition(
       id: json['id'] as int,
       name: json['name'] as String,
       phone: json['phone'] as String? ?? '',
+      ownerName: json['owner_name'] as String? ?? '',
+      logoUrl: json['logo_url'] as String?,
+      address: json['address'] as String? ?? '',
+      provinceId: province?['id'] as int? ?? json['province_id'] as int?,
+      provinceName: province?['name'] as String?,
     );
   }
 }

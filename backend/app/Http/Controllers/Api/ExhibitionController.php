@@ -118,7 +118,15 @@ class ExhibitionController extends Controller
             'cover_image' => ['nullable', 'image', 'max:5120'],
             'cover_image_url' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
+            'remove_logo' => ['sometimes', 'boolean'],
         ]);
+
+        if ($request->boolean('remove_logo')) {
+            if ($exhibition->logo && ! str_starts_with($exhibition->logo, 'http')) {
+                Storage::disk('public')->delete($exhibition->logo);
+            }
+            $data['logo'] = null;
+        }
 
         $data = $this->handleUploads($request, $data, $exhibition);
         $exhibition->update($data);
